@@ -1,10 +1,16 @@
 const crypto = require('crypto');
+const redis = require('../config/redis');
 
-// Aşama 2 bellek içi oturum deposu (Aşama 3'te Redis "oturum:{token}" yapısına geçirilecektir)
-const OTURUM_SURESI_MS = 30 * 60 * 1000; // 30 dakika
-const oturumlar = new Map();
+// Aşama 3: Oturumlar Redis'te "oturum:{token}" anahtarıyla 30 dakika TTL ile saklanır.
+// Her geçerli istekte EXPIRE ile süre yenilenir; uygulama container'ı yeniden başlasa da oturum düşmez.
+const OTURUM_SURESI_SN = 30 * 60; // 1800 saniye (30 dakika)
+const OTURUM_SURESI_MS = OTURUM_SURESI_SN * 1000;
 
-function oturumOlustur(kullanici) {
+function oturumAnahtari(token) {
+  return `oturum:${token}`;
+}
+
+async function oturumOlustur(kullanici) {
   const token = crypto.randomBytes(32).toString('hex');
   const veri = {
     id: kullanici.id,
@@ -12,38 +18,38 @@ function oturumOlustur(kullanici) {
     soyad: kullanici.soyad,
     eposta: kullanici.eposta,
     rol: kullanici.rol,
-    ogrenci_no: kullanici.ogrenci_no
+    ogrenci_no: kullanici.ogrenci_no,
+    giris_zamani: new Date().toISOString()
   };
-  oturumlar.set(token, {
-    veri,
-    sonKullanma: Date.now() + OTURUM_SURESI_MS
-  });
+
+  const anahtar = oturumAnahtari(token);
+  await redis.set(anahtar, JSON.stringify(veri), 'EX', OTURUM_SURESI_SN);
+  console.log(`[REDIS SESSION SET] key=${anahtar} kullanici=${kullanici.eposta} ttl=${OTURUM_SURESI_SN}s`);
   return token;
 }
 
-function oturumGetir(token) {
+async function oturumGetir(token) {
   if (!token) return null;
-  const kayit = oturumlar.get(token);
-  if (!kayit) return null;
+  const anahtar = oturumAnahtari(token);
+  const ham = await redis.get(anahtar);
+  if (!ham) return null;
 
-  if (Date.now() > kayit.sonKullanma) {
-    oturumlar.delete(token);
-    return null;
-  }
-
-  // Sliding expiration: her geçerli istekte süreyi 30 dakika yenile
-  kayit.sonKullanma = Date.now() + OTURUM_SURESI_MS;
-  return kayit.veri;
+  // Sliding expiration: her geçerli istekte oturum süresini 30 dakikaya yenile
+  await redis.expire(anahtar, OTURUM_SURESI_SN);
+  return JSON.parse(ham);
 }
 
-function oturumSil(token) {
+async function oturumSil(token) {
   if (!token) return;
-  oturumlar.delete(token);
+  const anahtar = oturumAnahtari(token);
+  const silinen = await redis.del(anahtar);
+  console.log(`[REDIS SESSION DEL] key=${anahtar} silinen=${silinen}`);
 }
 
 module.exports = {
   oturumOlustur,
   oturumGetir,
   oturumSil,
+  OTURUM_SURESI_SN,
   OTURUM_SURESI_MS
 };

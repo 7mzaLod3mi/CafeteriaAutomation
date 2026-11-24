@@ -18,6 +18,9 @@ async function gununMenusu(req, res, next) {
       ogunId: ogun_id,
       kullaniciRol: req.kullanici ? req.kullanici.rol : 'ogrenci'
     });
+    if (menu && menu.cache_durum) {
+      res.set('X-Cache', menu.cache_durum);
+    }
     return res.json({ menu });
   } catch (err) {
     return next(err);

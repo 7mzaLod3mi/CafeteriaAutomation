@@ -1,4 +1,5 @@
 const menuRepo = require('../repositories/menuRepository');
+const menuCache = require('./menuCache');
 const rezervasyonRepo = require('../repositories/rezervasyonRepository');
 const kullaniciRepo = require('../repositories/kullaniciRepository');
 const { UygulamaHatasi } = require('../middleware/errorMiddleware');
@@ -96,6 +97,7 @@ async function menuOlustur(veri) {
       ogun_id: ogunId,
       ...dogrulanmis
     });
+    await menuCache.menuSil(yemekhaneId, tarih, ogunId);
     return {
       mesaj: 'Yeni menü başarıyla oluşturuldu.',
       menu_id: menuId
@@ -118,6 +120,8 @@ async function menuGuncelle(menuId, veri) {
   if (!guncellenen) {
     throw new UygulamaHatasi(404, 'Güncellenecek menü bulunamadı.');
   }
+  // Yönetici menüyü değiştirdiğinde ilgili Redis önbellek kaydını sil
+  await menuCache.menuSil(guncellenen.yemekhane_id, guncellenen.tarih, guncellenen.ogun_id);
   return {
     mesaj: 'Menü başarıyla güncellendi.',
     menu_id: id,

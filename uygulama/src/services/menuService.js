@@ -1,4 +1,5 @@
 const menuRepo = require('../repositories/menuRepository');
+const menuCache = require('./menuCache');
 const { UygulamaHatasi } = require('../middleware/errorMiddleware');
 
 function kullaniciFiyatiHesapla(rol, ogrenciFiyati, personelFiyati) {
@@ -52,6 +53,24 @@ async function gununMenusuGetir({ yemekhaneId, tarih, ogunId, kullaniciRol }) {
     throw new UygulamaHatasi(400, 'Geçersiz tarih biçimi (YYYY-AA-GG).');
   }
 
+  // 1. Önce Redis önbelleğini kontrol et: menu:{yemekhane_id}:{tarih}:{ogun_id}
+  const onbellekVeri = await menuCache.menuGetir(yId, hedefTarih, oId);
+  if (onbellekVeri) {
+    const sonTarih = new Date(String(onbellekVeri.rezervasyon_son).replace(' ', 'T') + '+03:00');
+    return {
+      ...onbellekVeri,
+      rezervasyon_acik: Date.now() < sonTarih.getTime(),
+      kullanici_fiyati: kullaniciFiyatiHesapla(
+        kullaniciRol,
+        onbellekVeri.ogrenci_fiyati,
+        onbellekVeri.personel_fiyati
+      ),
+      cache_durum: 'HIT',
+      kaynak: 'redis'
+    };
+  }
+
+  // 2. Cache Miss -> MySQL Replica veritabanından oku
   const sonuc = await menuRepo.gununMenusuGetir(yId, hedefTarih, oId);
   if (!sonuc) {
     return null;
@@ -61,7 +80,7 @@ async function gununMenusuGetir({ yemekhaneId, tarih, ogunId, kullaniciRol }) {
   const yemekler = sonuc.detaySatirlari.map(yemekSatiriniBicimle);
   const toplamKalori = yemekler.reduce((toplam, y) => toplam + y.kalori, 0);
 
-  return {
+  const temelMenu = {
     menu_id: ilk.menu_id,
     tarih: ilk.tarih,
     yemekhane_id: ilk.yemekhane_id,
@@ -69,10 +88,8 @@ async function gununMenusuGetir({ yemekhaneId, tarih, ogunId, kullaniciRol }) {
     ogun_id: ilk.ogun_id,
     ogun: ilk.ogun,
     rezervasyon_son: ilk.rezervasyon_son,
-    rezervasyon_acik: Boolean(sonuc.doluluk && sonuc.doluluk.rezervasyon_acik),
     ogrenci_fiyati: Number(ilk.ogrenci_fiyati),
     personel_fiyati: Number(ilk.personel_fiyati),
-    kullanici_fiyati: kullaniciFiyatiHesapla(kullaniciRol, ilk.ogrenci_fiyati, ilk.personel_fiyati),
     kapasite: sonuc.doluluk ? Number(sonuc.doluluk.kapasite) : 0,
     rezerve: sonuc.doluluk ? Number(sonuc.doluluk.rezerve) : 0,
     bos_yer: sonuc.doluluk ? Number(sonuc.doluluk.bos_yer) : 0,
@@ -81,6 +98,17 @@ async function gununMenusuGetir({ yemekhaneId, tarih, ogunId, kullaniciRol }) {
     ortalama_puan: sonuc.puan.ortalama_puan !== null ? Number(sonuc.puan.ortalama_puan) : null,
     toplam_kalori: toplamKalori,
     yemekler
+  };
+
+  // 3. Veritabanından alınan menüyü gün sonuna kadar Redis'e kaydet
+  await menuCache.menuKaydet(yId, hedefTarih, oId, temelMenu);
+
+  return {
+    ...temelMenu,
+    rezervasyon_acik: Boolean(sonuc.doluluk && sonuc.doluluk.rezervasyon_acik),
+    kullanici_fiyati: kullaniciFiyatiHesapla(kullaniciRol, ilk.ogrenci_fiyati, ilk.personel_fiyati),
+    cache_durum: 'MISS',
+    kaynak: 'veritabani'
   };
 }
 
