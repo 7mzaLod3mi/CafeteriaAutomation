@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0A0A0B">
+  <title>Değerlendirme · Yemekhane Otomasyonu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/temel.css">
+  <link rel="stylesheet" href="/css/uygulama.css">
+</head>
+<body>
+  <div id="ust-cubuk-alani"></div>
+
+  <main class="kapsayici sayfa">
+    <div class="sayfa-baslik">
+      <div>
+        <span class="ust-etiket">Görüşünüz Önemli</span><h1>Menü <em>Değerlendirme</em></h1>
+        <p>Yalnızca kullandığınız menülere 1–5 arası puan verebilir ve yorum bırakabilirsiniz.</p>
+      </div>
+    </div>
+
+    <p id="deg-bildirim" class="bildirim gizli"></p>
+
+    <section class="kart">
+      <div class="kart-baslik">
+        <h2>Değerlendirme Bekleyen Kullanılmış Menüler</h2>
+      </div>
+      <div id="bekleyen-alani">
+        <p class="bos-durum">Yükleniyor…</p>
+      </div>
+    </section>
+
+    <section class="kart">
+      <div class="kart-baslik">
+        <h2>Geçmiş Değerlendirmelerim</h2>
+      </div>
+      <div class="tablo-kaydir">
+        <table class="veri-tablo">
+          <thead>
+            <tr>
+              <th>Menü</th>
+              <th>Puan</th>
+              <th>Yorum</th>
+              <th>Tarih</th>
+            </tr>
+          </thead>
+          <tbody id="gecmis-govde">
+            <tr><td colspan="4" class="bos-durum">Yükleniyor…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/ortak.js"></script>
+  <script src="/js/degerlendirme.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0A0A0B">
+  <title>Bakiye · Yemekhane Otomasyonu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/temel.css">
+  <link rel="stylesheet" href="/css/uygulama.css">
+</head>
+<body>
+  <div id="ust-cubuk-alani"></div>
+
+  <main class="kapsayici sayfa">
+    <div class="sayfa-baslik">
+      <div>
+        <span class="ust-etiket">Cüzdan</span><h1>Bakiye <em>&amp; Hareketler</em></h1>
+        <p>Güncel bakiyenizi görün, hesabınıza bakiye yükleyin ve tüm hareketleri inceleyin.</p>
+      </div>
+    </div>
+
+    <p id="bakiye-bildirim" class="bildirim gizli"></p>
+
+    <div class="izgara izgara-2">
+      <section class="kart bakiye-kahraman">
+        <div class="etiket">Güncel Bakiyeniz</div>
+        <div id="guncel-bakiye" class="deger">…</div>
+        <p class="not">Güncel bakiye tutarlılık için Primary sunucudan okunur.</p>
+      </section>
+
+      <section class="kart">
+        <h2>Bakiye Yükle</h2>
+        <div class="hizli-tutarlar">
+          <button type="button" class="dugme dugme-ikincil dugme-kucuk hizli-tutar-btn" data-tutar="50">+50 TL</button>
+          <button type="button" class="dugme dugme-ikincil dugme-kucuk hizli-tutar-btn" data-tutar="100">+100 TL</button>
+          <button type="button" class="dugme dugme-ikincil dugme-kucuk hizli-tutar-btn" data-tutar="250">+250 TL</button>
+          <button type="button" class="dugme dugme-ikincil dugme-kucuk hizli-tutar-btn" data-tutar="500">+500 TL</button>
+        </div>
+
+        <form id="bakiye-form" novalidate>
+          <div class="form-grup">
+            <label for="yukleme-tutari">Tutar (10 – 1000 TL)</label>
+            <input id="yukleme-tutari" type="number" step="0.50" placeholder="Örn. 100" required>
+          </div>
+          <button id="yukle-btn" type="submit" class="dugme dugme-tam">Bakiye Yükle</button>
+        </form>
+      </section>
+    </div>
+
+    <section class="kart">
+      <div class="kart-baslik">
+        <h2>Bakiye Hareketleri</h2>
+        <small>Kaynak: Replica veritabanı</small>
+      </div>
+      <div class="tablo-kaydir">
+        <table class="veri-tablo">
+          <thead>
+            <tr>
+              <th>Tarih</th>
+              <th>Tür</th>
+              <th>Açıklama</th>
+              <th>Tutar</th>
+            </tr>
+          </thead>
+          <tbody id="hareket-govde">
+            <tr><td colspan="4" class="bos-durum">Hareketler yükleniyor…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/ortak.js"></script>
+  <script src="/js/bakiye.js"></script>
+</body>
+</html>

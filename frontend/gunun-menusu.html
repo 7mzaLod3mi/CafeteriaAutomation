@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0A0A0B">
+  <title>Günün Menüsü · Yemekhane Otomasyonu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/temel.css">
+  <link rel="stylesheet" href="/css/uygulama.css">
+</head>
+<body>
+  <div id="ust-cubuk-alani"></div>
+
+  <main class="kapsayici sayfa">
+    <section class="kart hero-serit">
+      <div class="hero-tabak">
+        <img src="/img/tabak-hero.svg" alt="Günün Menüsü">
+      </div>
+      <div>
+        <span class="ust-etiket">Bugün ne var?</span>
+        <h1 style="margin-bottom: 0.3rem;">Günün <em>Menüsü</em></h1>
+        <p>Yemekler, toplam kalori, vejetaryen ve alerjen bilgileri.</p>
+      </div>
+      <a href="/haftalik-menu.html" class="dugme dugme-ikincil">Haftalık Menü</a>
+    </section>
+
+    <section class="kart">
+      <div class="filtre-cubugu">
+        <div>
+          <label for="yemekhane-sec">Yemekhane</label>
+          <select id="yemekhane-sec"></select>
+        </div>
+        <div>
+          <label for="ogun-sec">Öğün</label>
+          <select id="ogun-sec"></select>
+        </div>
+        <div>
+          <label for="tarih-sec">Tarih</label>
+          <input id="tarih-sec" type="date">
+        </div>
+      </div>
+    </section>
+
+    <p id="gunun-bildirim" class="bildirim gizli"></p>
+
+    <section id="menu-alani" class="kart">
+      <p class="bos-durum">Menü yükleniyor…</p>
+    </section>
+  </main>
+
+  <script src="/js/ortak.js"></script>
+  <script src="/js/gunun-menusu.js"></script>
+</body>
+</html>

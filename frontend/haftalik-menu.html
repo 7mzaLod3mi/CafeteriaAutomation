@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0A0A0B">
+  <title>Haftalık Menü ve Rezervasyon · Yemekhane Otomasyonu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/temel.css">
+  <link rel="stylesheet" href="/css/uygulama.css">
+</head>
+<body>
+  <div id="ust-cubuk-alani"></div>
+
+  <main class="kapsayici sayfa">
+    <div class="sayfa-baslik">
+      <div>
+        <span class="ust-etiket">7 Günlük Plan</span><h1>Haftalık <em>Menü</em></h1>
+        <p>Önümüzdeki 7 günün menülerini, boş koltuk sayılarını ve rolünüze göre fiyatları görün; tek tıkla rezervasyon yapın.</p>
+      </div>
+    </div>
+
+    <section class="kart">
+      <div class="filtre-cubugu filtre-cubugu-2">
+        <div>
+          <label for="haftalik-yemekhane">Yemekhane</label>
+          <select id="haftalik-yemekhane"></select>
+        </div>
+        <div>
+          <label for="haftalik-baslangic">Başlangıç Tarihi</label>
+          <input id="haftalik-baslangic" type="date">
+        </div>
+      </div>
+    </section>
+
+    <p id="haftalik-bildirim" class="bildirim gizli"></p>
+
+    <div id="haftalik-liste">
+      <p class="bos-durum">Haftalık menüler yükleniyor…</p>
+    </div>
+  </main>
+
+  <script src="/js/ortak.js"></script>
+  <script src="/js/haftalik-menu.js"></script>
+</body>
+</html>

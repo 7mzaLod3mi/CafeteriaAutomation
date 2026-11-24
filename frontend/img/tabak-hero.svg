@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="320" height="320">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#2A241A"/>
+      <stop offset="65%" stop-color="#141418"/>
+      <stop offset="100%" stop-color="#0E0E11"/>
+    </radialGradient>
+    <radialGradient id="plateOuter" cx="38%" cy="32%" r="68%">
+      <stop offset="0%" stop-color="#35353E"/>
+      <stop offset="55%" stop-color="#1D1D23"/>
+      <stop offset="100%" stop-color="#0F0F13"/>
+    </radialGradient>
+    <radialGradient id="plateInner" cx="45%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#27272F"/>
+      <stop offset="100%" stop-color="#131317"/>
+    </radialGradient>
+    <linearGradient id="goldRim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD074"/>
+      <stop offset="50%" stop-color="#F5A623"/>
+      <stop offset="100%" stop-color="#8C5910"/>
+    </linearGradient>
+    <radialGradient id="pilav" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FCE8B2"/>
+      <stop offset="60%" stop-color="#E7C170"/>
+      <stop offset="100%" stop-color="#B98B3A"/>
+    </radialGradient>
+    <radialGradient id="kofte" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#9B522C"/>
+      <stop offset="60%" stop-color="#6A3318"/>
+      <stop offset="100%" stop-color="#3E1B0B"/>
+    </radialGradient>
+    <radialGradient id="tomato" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FF785A"/>
+      <stop offset="55%" stop-color="#D93622"/>
+      <stop offset="100%" stop-color="#7D170E"/>
+    </radialGradient>
+    <filter id="dropShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.7"/>
+    </filter>
+  </defs>
+
+  <!-- Dark matte slate backdrop -->
+  <rect width="320" height="320" fill="url(#bgGlow)"/>
+
+  <!-- Subtle gold accent halo -->
+  <circle cx="160" cy="160" r="134" fill="none" stroke="url(#goldRim)" stroke-width="1.5" opacity="0.45"/>
+
+  <!-- Matte black ceramic plate -->
+  <g filter="url(#dropShadow)">
+    <circle cx="160" cy="160" r="122" fill="url(#plateOuter)" stroke="#383844" stroke-width="1.5"/>
+    <circle cx="160" cy="160" r="96" fill="url(#plateInner)" stroke="#2E2E38" stroke-width="1"/>
+  </g>
+
+  <!-- Golden saffron rice pilaf bed -->
+  <ellipse cx="148" cy="158" rx="64" ry="52" fill="url(#pilav)" opacity="0.96"/>
+  <g fill="#FFF5D6" opacity="0.65">
+    <ellipse cx="122" cy="142" rx="5" ry="2.2" transform="rotate(-22 122 142)"/>
+    <ellipse cx="138" cy="134" rx="5" ry="2.2" transform="rotate(15 138 134)"/>
+    <ellipse cx="158" cy="138" rx="5" ry="2.2" transform="rotate(-10 158 138)"/>
+    <ellipse cx="115" cy="160" rx="5" ry="2.2" transform="rotate(32 115 160)"/>
+    <ellipse cx="132" cy="176" rx="5" ry="2.2" transform="rotate(-18 132 176)"/>
+    <ellipse cx="150" cy="186" rx="5" ry="2.2" transform="rotate(24 150 186)"/>
+    <ellipse cx="174" cy="178" rx="5" ry="2.2" transform="rotate(-30 174 178)"/>
+  </g>
+
+  <!-- Grilled kofte medallions with sear marks -->
+  <g>
+    <ellipse cx="172" cy="136" rx="30" ry="18" transform="rotate(-18 172 136)" fill="url(#kofte)"/>
+    <path d="M156 130 L170 144 M168 124 L182 138 M180 120 L192 132" stroke="#2B1105" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+
+    <ellipse cx="188" cy="164" rx="30" ry="18" transform="rotate(14 188 164)" fill="url(#kofte)"/>
+    <path d="M172 156 L184 172 M186 153 L198 170 M198 154 L208 168" stroke="#2B1105" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+
+    <ellipse cx="150" cy="172" rx="28" ry="17" transform="rotate(-8 150 172)" fill="url(#kofte)"/>
+    <path d="M135 165 L148 180 M149 162 L162 178 M161 163 L172 175" stroke="#2B1105" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+  </g>
+
+  <!-- Roasted cherry tomatoes -->
+  <circle cx="114" cy="176" r="14" fill="url(#tomato)"/>
+  <circle cx="110" cy="171" r="3.5" fill="#FFC2B0" opacity="0.65"/>
+  <circle cx="198" cy="132" r="12" fill="url(#tomato)"/>
+  <circle cx="194" cy="128" r="3" fill="#FFC2B0" opacity="0.65"/>
+
+  <!-- Fresh green herb garnish leaves -->
+  <g fill="#49B66B">
+    <path d="M148 118 C156 104, 174 106, 168 122 C160 124, 152 122, 148 118 Z"/>
+    <path d="M134 150 C122 140, 128 124, 144 134 C144 142, 140 148, 134 150 Z" fill="#63CF84"/>
+    <path d="M180 192 C192 184, 206 196, 194 206 C186 204, 180 198, 180 192 Z"/>
+    <path d="M126 196 C138 190, 148 202, 136 210 C129 208, 125 202, 126 196 Z" fill="#3B9A58"/>
+  </g>
+
+  <!-- Golden saffron glaze drizzle dots -->
+  <g fill="#F5A623" opacity="0.88">
+    <circle cx="94" cy="144" r="3.5"/>
+    <circle cx="102" cy="128" r="2.2"/>
+    <circle cx="222" cy="184" r="3.5"/>
+    <circle cx="212" cy="198" r="2.2"/>
+    <circle cx="164" cy="214" r="2.6"/>
+  </g>
+</svg>
