@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0A0A0B">
+  <title>Profil ve Alerjenlerim · Yemekhane Otomasyonu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/temel.css">
+  <link rel="stylesheet" href="/css/uygulama.css">
+</head>
+<body>
+  <div id="ust-cubuk-alani"></div>
+
+  <main class="kapsayici sayfa">
+    <div class="sayfa-baslik">
+      <div>
+        <span class="ust-etiket">Kişisel Ayarlar</span>
+        <h1>Profil <em>&amp; Alerjenlerim</em></h1>
+        <p>Hassasiyetiniz olan alerjenleri seçin; menülerde bu alerjenleri içeren yemekler otomatik olarak uyarıyla gösterilir.</p>
+      </div>
+      <a href="/gunun-menusu.html" class="dugme dugme-ikincil">Günün Menüsüne Dön</a>
+    </div>
+
+    <p id="profil-bildirim" class="bildirim gizli"></p>
+
+    <section class="kart" id="profil-bilgi-karti">
+      <div class="kart-baslik">
+        <h2>Kullanıcı Bilgileri</h2>
+      </div>
+      <div id="profil-ozet" class="ozet-kutular">
+        <div class="ozet-kutu"><span>Yükleniyor…</span><strong>—</strong></div>
+      </div>
+    </section>
+
+    <section class="kart">
+      <div class="kart-baslik">
+        <div>
+          <h2>Alerjen Tercihlerim</h2>
+          <small>Seçtiğiniz alerjenler veritabanında <code>kullanici_alerjenleri</code> tablosunda saklanır.</small>
+        </div>
+        <span id="secili-sayac" class="rozet rozet-alerjen">0 alerjen seçili</span>
+      </div>
+
+      <form id="alerjen-form">
+        <div id="alerjen-izgara" class="alerjen-secim-izgara">
+          <p class="bos-durum">Alerjen listesi yükleniyor…</p>
+        </div>
+
+        <div class="menu-kart-alt" style="margin-top: 1.15rem;">
+          <button type="button" id="temizle-btn" class="dugme dugme-ikincil dugme-kucuk">Seçimleri Temizle</button>
+          <button type="submit" id="alerjen-kaydet-btn" class="dugme">Alerjen Tercihlerimi Kaydet</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="/js/ortak.js"></script>
+  <script src="/js/profil.js"></script>
+</body>
+</html>

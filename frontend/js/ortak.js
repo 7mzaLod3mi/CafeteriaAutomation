@@ -121,7 +121,8 @@ const Yemekhane = (() => {
     yumurta: '<path d="M12 3c3.5 0 6.5 5.5 6.5 10a6.5 6.5 0 0 1-13 0C5.5 8.5 8.5 3 12 3z"/>',
     fincan: '<path d="M5 8h12v6a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17M9 3v2M13 3v2"/>',
     gunes: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
-    ay: '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>'
+    ay: '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+    profil: '<circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/>'
   };
 
   function ikon(ad) {
@@ -155,15 +156,16 @@ const Yemekhane = (() => {
 
     const baglantilar = [
       { id: 'gunun-menusu', ad: 'Günün Menüsü', kisa: 'Menü', ikon: 'catal', href: '/gunun-menusu.html' },
-      { id: 'haftalik-menu', ad: 'Haftalık Menü', kisa: 'Haftalık', ikon: 'takvim', href: '/haftalik-menu.html' },
-      { id: 'rezervasyonlarim', ad: 'Rezervasyonlarım', kisa: 'Rezervasyon', ikon: 'liste', href: '/rezervasyonlarim.html' },
+      { id: 'haftalik-menu', ad: 'Haftalık', kisa: 'Haftalık', ikon: 'takvim', href: '/haftalik-menu.html' },
+      { id: 'rezervasyonlarim', ad: 'Rezervasyon', kisa: 'Rezervasyon', ikon: 'liste', href: '/rezervasyonlarim.html' },
       { id: 'bakiye', ad: 'Bakiye', kisa: 'Bakiye', ikon: 'cuzdan', href: '/bakiye.html' },
-      { id: 'degerlendirme', ad: 'Değerlendirme', kisa: 'Puanla', ikon: 'yildiz', href: '/degerlendirme.html' }
+      { id: 'degerlendirme', ad: 'Puanla', kisa: 'Puanla', ikon: 'yildiz', href: '/degerlendirme.html' },
+      { id: 'profil', ad: 'Profil', kisa: 'Profil', ikon: 'profil', href: '/profil.html' }
     ];
 
     const yonetici = kullanici && kullanici.rol === 'yonetici';
     if (yonetici) {
-      baglantilar.push({ id: 'yonetici', ad: 'Yönetici Paneli', kisa: 'Yönetici', ikon: 'kalkan', href: '/yonetici.html' });
+      baglantilar.push({ id: 'yonetici', ad: 'Yönetici', kisa: 'Yönetici', ikon: 'kalkan', href: '/yonetici.html' });
     }
 
     const linkHtml = baglantilar
@@ -173,10 +175,10 @@ const Yemekhane = (() => {
       )
       .join('');
 
-    // Alt menüde 5 sekme: yönetici için 5. sekme Yönetici Paneli olur
+    // Alt menüde 5 sekme: yönetici için 5. sekme Yönetici, diğerleri için Profil olur
     const altBaglantilar = yonetici
-      ? [baglantilar[0], baglantilar[1], baglantilar[2], baglantilar[3], baglantilar[5]]
-      : baglantilar.slice(0, 5);
+      ? [baglantilar[0], baglantilar[1], baglantilar[2], baglantilar[5], baglantilar[6]]
+      : [baglantilar[0], baglantilar[1], baglantilar[2], baglantilar[3], baglantilar[5]];
     const altMenuHtml = altBaglantilar
       .map(
         (b) =>

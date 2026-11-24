@@ -6,27 +6,35 @@ async function rezervasyonlariListele(kullaniciId, durum) {
   const satirlar = await rezervasyonRepo.kullaniciRezervasyonlariGetir(kullaniciId, durum);
   return satirlar.map((r) => ({
     ...r,
+    porsiyon: r.porsiyon || 'tam',
     ucret: Number(r.ucret),
     iptal_edilebilir: Boolean(r.iptal_edilebilir),
     degerlendirildi: Boolean(r.degerlendirildi)
   }));
 }
 
-async function rezervasyonYap(kullaniciId, menuId) {
+async function rezervasyonYap(kullaniciId, menuId, porsiyon = 'tam') {
   const mId = Number(menuId);
   if (!Number.isInteger(mId) || mId <= 0) {
     throw new UygulamaHatasi(400, 'Geçerli bir menü seçiniz.');
   }
 
-  // Yazma: sp_rezervasyon_yap Primary üzerinde çalışır
-  const spSonuc = await rezervasyonRepo.rezervasyonYap(kullaniciId, mId);
+  const temizPorsiyon = String(porsiyon || 'tam').trim().toLowerCase();
+  if (!['tam', 'yarim'].includes(temizPorsiyon)) {
+    throw new UygulamaHatasi(400, 'Geçersiz porsiyon seçimi.');
+  }
+
+  // Yazma: sp_rezervasyon_yap Primary üzerinde çalışır (kahvaltı kontrolü ve %60 ücret yordamda)
+  const spSonuc = await rezervasyonRepo.rezervasyonYap(kullaniciId, mId, temizPorsiyon);
 
   // Replikasyon gecikmesine karşı güncel bakiye doğrudan Primary'den okunur
   const guncelBakiye = await bakiyeRepo.guncelBakiyePrimaryGetir(kullaniciId);
 
+  const porsiyonMetni = spSonuc.porsiyon === 'yarim' ? 'Yarım porsiyon' : 'Tam porsiyon';
   return {
-    mesaj: 'Rezervasyonunuz başarıyla oluşturuldu.',
+    mesaj: `${porsiyonMetni} rezervasyonunuz başarıyla oluşturuldu.`,
     rezervasyon_id: spSonuc.rezervasyon_id,
+    porsiyon: spSonuc.porsiyon,
     ucret: Number(spSonuc.ucret),
     bakiye: guncelBakiye !== null ? guncelBakiye : Number(spSonuc.bakiye),
     bakiye_kaynak: 'mysql-primary'

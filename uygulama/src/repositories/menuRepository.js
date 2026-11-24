@@ -36,6 +36,7 @@ async function tumYemekleriGetir() {
 async function gununMenusuGetir(yemekhaneId, tarih, ogunId) {
   const [detaySatirlari] = await replicaPool.query(
     `SELECT menu_id, tarih, yemekhane_id, yemekhane, ogun_id, ogun, ogun_sira,
+            yarim_porsiyon_izinli,
             rezervasyon_son, ogrenci_fiyati, personel_fiyati,
             yemek_id, yemek, kategori_id, kategori, kategori_sira,
             kalori, vejetaryen, alerjenler, alerjen_idler
@@ -82,13 +83,14 @@ async function haftalikMenuleriGetir(yemekhaneId, baslangicTarih, bitisTarih, ku
 
   const [menuler] = await replicaPool.query(
     `SELECT d.menu_id, d.tarih, d.yemekhane_id, d.yemekhane, d.ogun_id, d.ogun,
-            o.sira AS ogun_sira, o.son_saat,
+            o.sira AS ogun_sira, o.son_saat, o.yarim_porsiyon_izinli,
             m.ogrenci_fiyati, m.personel_fiyati,
             d.kapasite, d.rezerve, d.bos_yer, d.doluluk_yuzde, d.rezervasyon_son,
             (NOW() < d.rezervasyon_son) AS rezervasyon_acik,
             p.oy_sayisi, p.ortalama_puan,
             r.id AS kullanici_rezervasyon_id,
-            r.durum AS kullanici_rezervasyon_durumu
+            r.durum AS kullanici_rezervasyon_durumu,
+            r.porsiyon AS kullanici_rezervasyon_porsiyon
        FROM v_menu_doluluk d
        JOIN menuler m ON m.id = d.menu_id
        JOIN ogunler o ON o.id = d.ogun_id

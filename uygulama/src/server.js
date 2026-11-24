@@ -7,6 +7,7 @@ const rezervasyonRoutes = require('./routes/rezervasyonRoutes');
 const bakiyeRoutes = require('./routes/bakiyeRoutes');
 const degerlendirmeRoutes = require('./routes/degerlendirmeRoutes');
 const yoneticiRoutes = require('./routes/yoneticiRoutes');
+const profilRoutes = require('./routes/profilRoutes');
 const kullaniciRepo = require('./repositories/kullaniciRepository');
 const { hataYakalayici } = require('./middleware/errorMiddleware');
 
@@ -51,6 +52,7 @@ app.use('/api/rezervasyonlar', rezervasyonRoutes);
 app.use('/api/bakiye', bakiyeRoutes);
 app.use('/api/degerlendirmeler', degerlendirmeRoutes);
 app.use('/api/yonetici', yoneticiRoutes);
+app.use('/api/profil', profilRoutes);
 
 // Tanımsız API yolları
 app.use('/api', (req, res) => {

@@ -44,6 +44,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             islemHtml = `<small>İptal: ${Yemekhane.escapeHtml(Yemekhane.zamanBicimle(r.iptal_zamani))}</small>`;
           }
 
+          const porsiyonRozet =
+            r.porsiyon === 'yarim'
+              ? '<span class="rozet rozet-yarim">Yarım (%60)</span>'
+              : '<span class="rozet rozet-kalori">Tam</span>';
+
           return `
             <tr>
               <td>
@@ -51,7 +56,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <small>${Yemekhane.escapeHtml(r.ogun)} (Son: ${Yemekhane.escapeHtml(Yemekhane.zamanBicimle(r.rezervasyon_son))})</small>
               </td>
               <td>${Yemekhane.escapeHtml(r.yemekhane)}</td>
-              <td><strong>${Yemekhane.paraBicimle(r.ucret)}</strong></td>
+              <td>
+                <strong>${Yemekhane.paraBicimle(r.ucret)}</strong><br>
+                ${porsiyonRozet}
+              </td>
               <td>${durumRozeti(r.durum)}</td>
               <td>${islemHtml}</td>
             </tr>

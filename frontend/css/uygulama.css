@@ -832,4 +832,119 @@ body.alt-menulu { padding-bottom: 84px; }
 
 .bos-durum { text-align: center; padding: 2rem 1rem; color: var(--metin-soluk); }
 
+/* =====================================================================
+   AŞAMA 4: YARIM PORSİYON SEÇİCİ & ALERJEN UYARILARI
+   ===================================================================== */
+.porsiyon-secici {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  padding: 0.28rem;
+  border-radius: 999px;
+  background: var(--yuzey-2);
+  border: 1px solid var(--cizgi);
+  width: 100%;
+}
+
+.porsiyon-btn {
+  min-height: 36px;
+  padding: 0.35rem 0.65rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--metin-soluk);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.porsiyon-btn:hover { color: var(--metin); }
+.porsiyon-btn.secili {
+  background: var(--altin);
+  color: var(--altin-metin);
+  font-weight: 700;
+}
+
+.porsiyon-bilgi {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: var(--yuzey-2);
+  border: 1px dashed var(--cizgi);
+  color: var(--metin-soluk);
+  font-size: 0.76rem;
+}
+
+.alerjen-uyari-bandi {
+  padding: 0.85rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 14px;
+  background: rgba(255, 90, 79, 0.14);
+  border: 1px solid rgba(255, 122, 110, 0.45);
+  border-left: 4px solid var(--hata);
+  color: #FFB4AD;
+  font-size: 0.88rem;
+}
+.alerjen-uyari-bandi strong { color: #FF7A6E; }
+
+.yemek-kart-uyari {
+  border-color: rgba(255, 122, 110, 0.65) !important;
+  background: linear-gradient(180deg, rgba(255, 90, 79, 0.12) 0%, var(--yuzey-2) 100%);
+  box-shadow: 0 0 0 1px rgba(255, 122, 110, 0.25);
+}
+
+.rozet-uyari {
+  color: #141414;
+  background: #FF7A6E;
+  border-color: #FF7A6E;
+  font-weight: 700;
+}
+
+.rozet-yarim {
+  color: var(--altin);
+  background: var(--altin-soluk);
+  border-color: var(--altin-cizgi);
+}
+
+.alerjen-secim-izgara {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+@media (min-width: 680px) {
+  .alerjen-secim-izgara { grid-template-columns: repeat(3, 1fr); }
+}
+
+.alerjen-kutu {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: 14px;
+  background: var(--yuzey-2);
+  border: 1px solid var(--cizgi);
+  color: var(--metin);
+  font-size: 0.86rem;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.alerjen-kutu:hover { border-color: var(--altin-cizgi); }
+.alerjen-kutu.secili {
+  background: rgba(255, 122, 110, 0.14);
+  border-color: rgba(255, 122, 110, 0.6);
+  color: #FFD2CE;
+}
+.alerjen-kutu input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #FF7A6E;
+  flex-shrink: 0;
+}
+
 .gizli { display: none !important; }

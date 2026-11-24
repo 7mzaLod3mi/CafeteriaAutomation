@@ -24,9 +24,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       const { menu } = await Yemekhane.apiIstek(`/api/menuler/gunun?${qs.toString()}`);
 
       if (!menu) {
-        menuAlani.innerHTML = '<p class="bos-durum">Seçilen yemekhane, tarih ve öğün için tanımlı menü bulunamadı.</p>';
+        menuAlani.innerHTML =
+          '<p class="bos-durum">Seçilen yemekhane, tarih ve öğün için tanımlı menü bulunamadı.</p>';
         return;
       }
+
+      const uyariBandi =
+        menu.alerjen_uyarili_yemek_sayisi > 0
+          ? `<div class="alerjen-uyari-bandi" role="alert">
+               <strong>⚠ Alerjen Uyarısı:</strong> Bu menüde profilinizde seçtiğiniz alerjenleri içeren
+               <strong>${menu.alerjen_uyarili_yemek_sayisi}</strong> yemek bulunmaktadır.
+               <a href="/profil.html" style="margin-left: 0.4rem; text-decoration: underline;">Tercihleri düzenle</a>
+             </div>`
+          : '';
 
       const yemekHtml = menu.yemekler
         .map((y) => {
@@ -40,8 +50,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             ? '<span class="rozet rozet-vejetaryen">Vejetaryen</span>'
             : '';
 
+          const uyariRozet =
+            y.alerjen_uyarisi && y.eslesen_alerjenler && y.eslesen_alerjenler.length
+              ? `<span class="rozet rozet-uyari">⚠ Alerjen Uyarısı: ${Yemekhane.escapeHtml(y.eslesen_alerjenler.join(', '))}</span>`
+              : '';
+
           return `
-            <article class="yemek-kart">
+            <article class="yemek-kart ${y.alerjen_uyarisi ? 'yemek-kart-uyari' : ''}">
               <div class="yemek-ikon">${Yemekhane.kategoriIkonu(y.kategori)}</div>
               <span class="yemek-kategori">${Yemekhane.escapeHtml(y.kategori)}</span>
               <h3 class="yemek-ad">${Yemekhane.escapeHtml(y.yemek)}</h3>
@@ -49,6 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <span class="rozet rozet-kalori">${y.kalori} kcal</span>
                 ${vejetaryenRozet}
                 ${alerjenRozetleri}
+                ${uyariRozet}
               </div>
             </article>
           `;
@@ -59,6 +75,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         menu.ortalama_puan !== null
           ? `${menu.ortalama_puan.toFixed(2)} / 5 (${menu.oy_sayisi} oy)`
           : 'Henüz oy yok';
+
+      const porsiyonAlani = menu.yarim_porsiyon_izinli
+        ? `<div class="porsiyon-secici" id="gunun-porsiyon-secici" style="max-width: 340px;">
+             <button type="button" class="porsiyon-btn secili" data-porsiyon="tam">Tam · ${Yemekhane.paraBicimle(menu.kullanici_fiyati)}</button>
+             <button type="button" class="porsiyon-btn" data-porsiyon="yarim">Yarım (%60) · ${Yemekhane.paraBicimle(menu.yarim_kullanici_fiyati)}</button>
+           </div>`
+        : `<span class="porsiyon-bilgi" style="max-width: 320px;">Kahvaltıda yarım porsiyon seçeneği bulunmamaktadır</span>`;
 
       menuAlani.innerHTML = `
         <div class="kart-baslik">
@@ -72,6 +95,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           <span class="rozet rozet-fiyat">${Yemekhane.paraBicimle(menu.kullanici_fiyati)}</span>
         </div>
 
+        ${uyariBandi}
+
         <div class="ozet-kutular">
           <div class="ozet-kutu altin">
             <span>Toplam Kalori</span>
@@ -82,8 +107,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             <strong>${menu.bos_yer} / ${menu.kapasite}</strong>
           </div>
           <div class="ozet-kutu">
-            <span>Öğrenci / Personel</span>
-            <strong>${Yemekhane.paraBicimle(menu.ogrenci_fiyati)} / ${Yemekhane.paraBicimle(menu.personel_fiyati)}</strong>
+            <span>Tam / Yarım (%60)</span>
+            <strong>${Yemekhane.paraBicimle(menu.kullanici_fiyati)} / ${menu.yarim_porsiyon_izinli ? Yemekhane.paraBicimle(menu.yarim_kullanici_fiyati) : 'Yok'}</strong>
           </div>
           <div class="ozet-kutu">
             <span>Ortalama Puan</span>
@@ -93,22 +118,41 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         <div class="yemek-izgara">${yemekHtml}</div>
 
-        <div class="menu-kart-alt" style="margin-top: 1.1rem;">
-          <small>Rezervasyon Primary sunucuda <code>sp_rezervasyon_yap</code> ile yapılır.</small>
+        <div class="menu-kart-alt" style="margin-top: 1.15rem;">
+          ${porsiyonAlani}
           <button type="button" id="hizli-rezerve-btn" class="dugme" ${menu.rezervasyon_acik && menu.bos_yer > 0 ? '' : 'disabled'}>
-            ${!menu.rezervasyon_acik ? 'Rezervasyon Süresi Doldu' : menu.bos_yer <= 0 ? 'Kapasite Dolu' : 'Rezervasyon Yap'}
+            ${!menu.rezervasyon_acik ? 'Rezervasyon Süresi Doldu' : menu.bos_yer <= 0 ? 'Kapasite Dolu' : `Rezervasyon Yap (${Yemekhane.paraBicimle(menu.kullanici_fiyati)})`}
           </button>
         </div>
       `;
 
+      let seciliPorsiyon = 'tam';
       const rezBtn = document.getElementById('hizli-rezerve-btn');
+      const porsiyonSecici = document.getElementById('gunun-porsiyon-secici');
+
+      if (porsiyonSecici) {
+        porsiyonSecici.querySelectorAll('.porsiyon-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            seciliPorsiyon = btn.dataset.porsiyon;
+            porsiyonSecici.querySelectorAll('.porsiyon-btn').forEach((b) => {
+              b.classList.toggle('secili', b === btn);
+            });
+            if (rezBtn && !rezBtn.disabled) {
+              const gosterilenFiyat =
+                seciliPorsiyon === 'yarim' ? menu.yarim_kullanici_fiyati : menu.kullanici_fiyati;
+              rezBtn.textContent = `Rezervasyon Yap (${Yemekhane.paraBicimle(gosterilenFiyat)})`;
+            }
+          });
+        });
+      }
+
       if (rezBtn && !rezBtn.disabled) {
         rezBtn.addEventListener('click', async () => {
           rezBtn.disabled = true;
           try {
             const sonuc = await Yemekhane.apiIstek('/api/rezervasyonlar', {
               method: 'POST',
-              body: { menu_id: menu.menu_id }
+              body: { menu_id: menu.menu_id, porsiyon: seciliPorsiyon }
             });
             Yemekhane.bakiyeRozetiGuncelle(sonuc.bakiye);
             Yemekhane.bildirimGoster(

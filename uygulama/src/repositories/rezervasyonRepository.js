@@ -10,7 +10,7 @@ async function kullaniciRezervasyonlariGetir(kullaniciId, durum) {
   }
 
   const [rows] = await replicaPool.query(
-    `SELECT r.id, r.menu_id, r.durum, r.ucret, r.olusturma, r.kullanma_zamani, r.iptal_zamani,
+    `SELECT r.id, r.menu_id, r.durum, r.porsiyon, r.ucret, r.olusturma, r.kullanma_zamani, r.iptal_zamani,
             m.tarih, yh.id AS yemekhane_id, yh.ad AS yemekhane,
             o.id AS ogun_id, o.ad AS ogun, o.sira AS ogun_sira,
             TIMESTAMP(m.tarih, o.son_saat) AS rezervasyon_son,
@@ -29,10 +29,10 @@ async function kullaniciRezervasyonlariGetir(kullaniciId, durum) {
 }
 
 // Rezervasyon oluşturma: Stored Procedure -> Primary (autocommit açıkken CALL)
-async function rezervasyonYap(kullaniciId, menuId) {
+async function rezervasyonYap(kullaniciId, menuId, porsiyon = 'tam') {
   const [resultSets] = await primaryPool.query(
-    `CALL sp_rezervasyon_yap(?, ?)`,
-    [kullaniciId, menuId]
+    `CALL sp_rezervasyon_yap(?, ?, ?)`,
+    [kullaniciId, menuId, porsiyon]
   );
   return resultSets[0][0];
 }

@@ -16,7 +16,7 @@ async function gununMenusu(req, res, next) {
       yemekhaneId: yemekhane_id,
       tarih,
       ogunId: ogun_id,
-      kullaniciRol: req.kullanici ? req.kullanici.rol : 'ogrenci'
+      kullanici: req.kullanici || null
     });
     if (menu && menu.cache_durum) {
       res.set('X-Cache', menu.cache_durum);

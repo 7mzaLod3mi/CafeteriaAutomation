@@ -12,8 +12,8 @@ async function listele(req, res, next) {
 
 async function olustur(req, res, next) {
   try {
-    const { menu_id } = req.body || {};
-    const sonuc = await rezervasyonService.rezervasyonYap(req.kullanici.id, menu_id);
+    const { menu_id, porsiyon } = req.body || {};
+    const sonuc = await rezervasyonService.rezervasyonYap(req.kullanici.id, menu_id, porsiyon);
     return res.status(201).json(sonuc);
   } catch (err) {
     return next(err);
